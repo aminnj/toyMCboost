@@ -52,19 +52,22 @@ void doStuff() {
     double massW = 80.4;
     double massQuark = 0.01; // 10 MeV let's say XXX (?)
     double massTop = 173; 
-    double massB = 0.042; // 4.2 MeV
+    double massB = 4.2; // 4.2 GeV
 
-    for(double energyTop = 400; energyTop < 1200; energyTop += 25) {
+    for(double energyTop = 200; energyTop < 1200; energyTop += 25) {
+
+        // double energyTop = massTop;
 
         cout << "energyTop: " << energyTop << endl;
 
         // double energyTop = 700;
 
-        for(int i = 0; i < 20000; i++) {
+        for(int i = 0; i < 10000; i++) {
             // TLorentzVector top;
             double pTop = sqrt(energyTop*energyTop - massTop*massTop);
             double phiTop = r.Uniform(-PI,PI);
-            double thetaTop = r.Uniform(0,PI);
+            // double thetaTop = r.Uniform(0,PI);
+            double thetaTop = f1.GetRandom();
             top.SetPxPyPzE( pTop*cos(phiTop)*sin(thetaTop), pTop*sin(phiTop)*sin(thetaTop), pTop*cos(thetaTop), energyTop );
             TVector3 boostFromTop = top.BoostVector();
 
@@ -72,15 +75,15 @@ void doStuff() {
             double energyB = (massTop*massTop - massW*massW + massB*massB)/(2*massTop);
             double pB = sqrt(energyB*energyB - massB*massB);
             double phiB = r.Uniform(-PI,PI);
-            double thetaB = r.Uniform(0,PI);
+            double thetaB = f1.GetRandom();
             b.SetPxPyPzE( pB*cos(phiB)*sin(thetaB), pB*sin(phiB)*sin(thetaB), pB*cos(thetaB), energyB );
             b.Boost(boostFromTop);
 
             // TLorentzVector W;
             double energyW = (massTop*massTop + massW*massW - massB*massB)/(2*massTop); // W is unboosted right now
             double pW = sqrt(energyW*energyW - massW*massW);
-            double phiW = -phiB;
-            double thetaW = -thetaB;
+            double phiW = PI-phiB;
+            double thetaW = PI-thetaB;
             W.SetPxPyPzE( pW*cos(phiW)*sin(thetaW), pW*sin(phiW)*sin(thetaW), pW*cos(thetaW), energyW );
 
             W.Boost(boostFromTop);
